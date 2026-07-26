@@ -17,7 +17,7 @@
                         'pb-light': '#F3F4F6'       // 淺色背景
                     },
                     aspectRatio: {
-                        'dm': '1 / 1.414', // A4比例，接近DM
+                        'dm': '1 / 1.414', // A4比例
                     }
                 }
             }
@@ -28,7 +28,6 @@
     <style>
         body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
         .bg-dm-hero {
-            /* 這裡使用 base64 將您的圖片嵌入，確保您複製程式碼後直接可見 */
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('image_0.png');
             background-size: cover;
             background-position: center;
@@ -41,13 +40,50 @@
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            background-color: #166534; /* shengyu-green */
+            background-color: #166534;
             border: 3px solid white;
             box-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
+        /* 編輯模式時按鈕的外框特效 */
+        .edit-mode-active .editable-btn {
+            outline: 3px dashed #ef4444 !important;
+            outline-offset: 2px;
+            cursor: pointer !important;
+            position: relative;
+        }
+        .edit-mode-active .editable-btn::after {
+            content: '✏️';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
-<body class="bg-pb-light text-pb-dark pb-24"> <!-- pb-24 為底部導覽條留空間 -->
+<body class="bg-pb-light text-pb-dark pb-24">
+
+
+    <!-- ==========================================
+         TOP EDIT CONTROL (編輯模式控制列)
+         ========================================== -->
+    <div class="fixed top-3 right-3 z-50 bg-black/80 text-white backdrop-blur-md px-4 py-2 rounded-full shadow-2xl flex items-center gap-3 border border-white/20">
+        <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="editToggle" class="sr-only peer" onchange="toggleEditMode()">
+            <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+            <span class="ml-2 text-sm font-bold select-none" id="editToggleLabel">✏️ 開啟按鈕編輯</span>
+        </label>
+        <button id="exportBtn" onclick="exportHTML()" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow transition">
+            💾 儲存並下載 HTML
+        </button>
+    </div>
 
     <!-- ==========================================
          HERO SECTION (以 DM 為底圖 + 帥氣導遊)
@@ -61,7 +97,7 @@
             <p class="text-lg mt-4 px-6">台東跨年煙火 × 元旦第一道曙光 × 南橫天路縱走</p>
         </div>
 
-        <!-- 帥氣導遊 + 勝裕遊覽車專業團隊 (圖片中的人物) -->
+        <!-- 帥氣導遊 + 勝裕遊覽車專業團隊 -->
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div class="flex items-center space-x-6 bg-black/40 p-4 rounded-full border-4 border-shengyu-yellow backdrop-blur-sm pointer-events-auto">
                 <img src="image_1.png" alt="專業導遊" class="w-24 h-24 rounded-full border-4 border-white object-cover object-top">
@@ -75,8 +111,9 @@
 
         <div class="mb-10">
             <p class="text-lg font-bold">115/12/31 ～ 116/1/3</p>
-            <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="mt-4 inline-block bg-shengyu-yellow text-shengyu-green font-black text-xl px-12 py-4 rounded-full shadow-lg hover:bg-white transition duration-300">
-                <i class="fas fa-ticket-alt mr-2"></i>立即報名
+            <!-- 可編輯按鈕 1 -->
+            <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn inline-block bg-shengyu-yellow text-shengyu-green font-black text-xl px-12 py-4 rounded-full shadow-lg hover:bg-white transition duration-300">
+                <i class="fas fa-ticket-alt mr-2"></i><span class="btn-text">立即報名</span>
             </a>
         </div>
     </header>
@@ -105,7 +142,7 @@
             <div class="bg-pb-light p-5 rounded-2xl text-center border-b-4 border-shengyu-yellow">
                 <p class="text-5xl mb-3">♨️</p>
                 <p class="font-bold text-lg">寶來美人湯</p>
-                <p class="text-xs text-gray-600">碳酸氫鈉泉 洗去 fatigue</p>
+                <p class="text-xs text-gray-600">碳酸氫鈉泉 洗去疲憊</p>
             </div>
         </div>
     </section>
@@ -122,14 +159,12 @@
             <p class="text-gray-500 mb-6">台中出發 → 台東跨年</p>
             
             <div class="border-l-2 border-gray-200 ml-3 space-y-8 relative">
-                <!-- 勝裕遊覽車 (交通) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-bus-alt mr-1"></i>交通</span>
                     <h4 class="text-lg font-bold">勝裕豪華遊覽車出發</h4>
                     <p class="text-sm text-gray-600">準時在指定地點集合，搭乘舒適遊覽車展開旅程。</p>
                 </div>
 
-                <!-- 漫步台東海濱公園 (活動/景點) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-skating mr-1"></i>活動</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
@@ -138,7 +173,6 @@
                     <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：傍晚時分拍攝「國際地標」(向陽樹) 與太平洋的合影最迷人。</p>
                 </div>
 
-                <!-- 跨年晚會與煙火 (活動) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-fireworks mr-1"></i>活動</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
@@ -146,7 +180,6 @@
                     <p class="text-sm text-gray-600">在歡呼聲中迎接嶄新的一年，享受一輩子難忘的回憶。</p>
                 </div>
 
-                <!-- 台東凱旋會館 (酒店) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-hotel mr-1"></i>酒店</span>
                     <h4 class="text-lg font-bold">入住：台東凱旋會館</h4>
@@ -167,16 +200,14 @@
             <p class="text-gray-500 mb-6">迎曙光 → 花東縱谷單車</p>
             
             <div class="border-l-2 border-gray-200 ml-3 space-y-8 relative">
-                <!-- 元旦第一道曙光 (活動/景點) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-cloud-sun-rain mr-1"></i>活動</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
                     <h4 class="text-lg font-bold">迎 2027 第一道曙光</h4>
                     <p class="text-sm text-gray-600">感受太陽從太平洋海平面緩緩升起的感動。</p>
-                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：使用縮時攝影記錄太陽升起过程；或以剪影方式與大海合影。</p>
+                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：使用縮時攝影記錄太陽升起過程；或以剪影方式與大海合影。</p>
                 </div>
 
-                <!-- 池上單車漫遊 (活動/景點) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-bicycle mr-1"></i>活動</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
@@ -187,7 +218,6 @@
                     <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：在天堂路的S型彎道處，可以拍出無限延伸的感覺。</p>
                 </div>
 
-                <!-- 台糖池上牧野渡假村 (酒店) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-hotel mr-1"></i>酒店</span>
                     <h4 class="text-lg font-bold">入住：台糖池上牧野渡假村</h4>
@@ -208,17 +238,16 @@
             <p class="text-gray-500 mb-6">南橫天路縱走 → 寶來溫泉</p>
             
             <div class="border-l-2 border-gray-200 ml-3 space-y-8 relative">
-                <!-- 南橫專用接駁車 (交通) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-shuttle-van mr-1"></i>交通</span>
                     <h4 class="text-lg font-bold">換乘南橫專用接駁車</h4>
                     <p class="text-sm text-gray-600">由於山路狹窄，換乘中型巴士深入南橫核心。</p>
+                    <!-- 可編輯連結按鈕 -->
                     <p class="mt-2 text-sm text-red-600 font-bold bg-red-50 p-3 rounded-lg border border-red-200">⚠️ 南橫路況提醒：南橫公路常有動態管制，請依導遊通知為準，或
-                        <a href="https://168.thb.gov.tw/" target="_blank" class="underline text-red-800">查詢公路總局動態情報</a>。
+                        <a href="https://168.thb.gov.tw/" target="_blank" class="editable-btn underline text-red-800 font-black"><span class="btn-text">查詢公路總局動態情報</span></a>。
                     </p>
                 </div>
 
-                <!-- 南橫祕境 (景點) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-tree mr-1"></i>景點</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
@@ -229,10 +258,9 @@
                         <li>大關山隧道、檜谷神木</li>
                         <li>天池、長青祠</li>
                     </ul>
-                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：埡口是最高點，運氣好能拍到整片滿滿的雲海浮在腳下。</p>
+                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：埡口是最高點，運氣好能拍到整片滿滿的雲海 strike。</p>
                 </div>
 
-                <!-- 寶來溫泉山莊 (酒店) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-hotel mr-1"></i>酒店</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
@@ -254,7 +282,6 @@
             <p class="text-gray-500 mb-6">寶來 → 錫安山 → 回程</p>
             
             <div class="border-l-2 border-gray-200 ml-3 space-y-8 relative">
-                <!-- 錫安山 (景點) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-place-of-worship mr-1"></i>景點</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
@@ -264,7 +291,6 @@
                     <p class="mt-2 text-sm text-gray-500 bg-gray-100 p-3 rounded-lg">🚗 停車＆加油資訊：錫安山園區內設有大型免費停車場。山下六龜或甲仙區有加油站。</p>
                 </div>
 
-                <!-- 回程台中 (交通) -->
                 <div class="pl-8 relative itinerary-dot">
                     <span class="inline-block bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-bus-alt mr-1"></i>交通</span>
                     <h4 class="text-lg font-bold">勝裕豪華遊覽車回程台中</h4>
@@ -292,8 +318,9 @@
             <p class="text-xl font-bold">115/12/31 ～ 116/1/3</p>
         </div>
         <div>
-            <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="inline-block bg-shengyu-yellow text-shengyu-green font-black text-2xl px-16 py-5 rounded-full shadow-lg hover:bg-white transition duration-300 transform hover:scale-105">
-                <i class="fas fa-shopping-cart mr-2"></i>我要報名！
+            <!-- 可編輯按鈕 2 -->
+            <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn inline-block bg-shengyu-yellow text-shengyu-green font-black text-2xl px-16 py-5 rounded-full shadow-lg hover:bg-white transition duration-300 transform hover:scale-105">
+                <i class="fas fa-shopping-cart mr-2"></i><span class="btn-text">我要報名！</span>
             </a>
         </div>
     </section>
@@ -312,37 +339,160 @@
             註冊編號846600 <br>
             交觀甲6190 品保中0491
         </div>
-        <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="mt-6 inline-block bg-gray-600 text-white font-bold text-sm px-6 py-2 rounded-full hover:bg-gray-500">
-            線上報名入口
+        <!-- 可編輯按鈕 3 -->
+        <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn inline-block bg-gray-600 text-white font-bold text-sm px-6 py-2 rounded-full hover:bg-gray-500">
+            <span class="btn-text">線上報名入口</span>
         </a>
     </footer>
 
     <!-- ==========================================
-         FLOATING ACTION BUTTON (手機版右下角立即報名)
+         FLOATING ACTION BUTTON (手機版右下角浮動按鈕)
          ========================================== -->
-    <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="fixed bottom-24 right-6 bg-shengyu-yellow text-shengyu-green w-20 h-20 rounded-full shadow-2xl flex flex-col items-center justify-center border-4 border-white transform hover:scale-110 active:scale-95 transition z-50 md:bottom-10 md:right-10">
-        <p class="font-black text-xl leading-tight">立即</p>
-        <p class="font-black text-xl leading-tight">報名</p>
-        <i class="fas fa-paper-plane mt-1 text-sm"></i>
+    <!-- 可編輯按鈕 4 (浮動按鈕) -->
+    <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn fixed bottom-24 right-6 bg-shengyu-yellow text-shengyu-green w-20 h-20 rounded-full shadow-2xl flex flex-col items-center justify-center border-4 border-white transform hover:scale-110 active:scale-95 transition z-50 md:bottom-10 md:right-10">
+        <span class="btn-text font-black text-xl leading-tight text-center">立即<br>報名</span>
     </a>
 
     <!-- ==========================================
          BOTTOM NAV BAR (底部浮動導覽條)
          ========================================== -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-xl p-3 flex justify-around items-center z-40">
-        <a href="#" class="text-center text-shengyu-green font-bold">
+        <!-- 可編輯導覽按鈕 1 -->
+        <a href="#" class="editable-btn text-center text-shengyu-green font-bold">
             <i class="fas fa-home text-2xl"></i>
-            <span class="block text-xs mt-1">首頁</span>
+            <span class="btn-text block text-xs mt-1">首頁</span>
         </a>
-        <a href="tel:04-23357766" class="text-center text-gray-600">
+        <!-- 可編輯導覽按鈕 2 -->
+        <a href="tel:04-23357766" class="editable-btn text-center text-gray-600">
             <i class="fas fa-phone-alt text-2xl"></i>
-            <span class="block text-xs mt-1">電話熱線</span>
+            <span class="btn-text block text-xs mt-1">電話熱線</span>
         </a>
-        <a href="https://line.me/ti/p/%40fwv3243l" target="_blank" class="text-center text-gray-600">
+        <!-- 可編輯導覽按鈕 3 -->
+        <a href="https://line.me/ti/p/%40fwv3243l" target="_blank" class="editable-btn text-center text-gray-600">
             <i class="fab fa-line text-2xl"></i>
-            <span class="block text-xs mt-1">LINE 諮詢</span>
+            <span class="btn-text block text-xs mt-1">LINE 諮詢</span>
         </a>
     </nav>
+
+    <!-- ==========================================
+         MODAL FOR EDITING BUTTONS (編輯彈窗)
+         ========================================== -->
+    <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-bold text-gray-800">✏️ 編輯按鈕設定</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">按鈕顯示文字</label>
+                <input type="text" id="modalBtnText" class="w-full border-2 border-gray-300 rounded-xl p-3 focus:border-shengyu-green focus:outline-none font-bold">
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">目標連結 (URL)</label>
+                <input type="text" id="modalBtnUrl" class="w-full border-2 border-gray-300 rounded-xl p-3 focus:border-shengyu-green focus:outline-none text-sm font-mono">
+            </div>
+            <div class="flex justify-end gap-3 pt-3">
+                <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 font-bold hover:bg-gray-300">取消</button>
+                <button onclick="saveBtnChanges()" class="px-5 py-2.5 rounded-xl bg-shengyu-green text-white font-bold hover:bg-emerald-800 shadow">儲存修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT FOR INLINE EDITING
+         ========================================== -->
+    <script>
+        let isEditMode = false;
+        let currentTargetBtn = null;
+
+        // 切換編輯模式
+        function toggleEditMode() {
+            isEditMode = document.getElementById('editToggle').checked;
+            const label = document.getElementById('editToggleLabel');
+            const exportBtn = document.getElementById('exportBtn');
+
+            if (isEditMode) {
+                document.body.classList.add('edit-mode-active');
+                label.innerText = '🔴 編輯模式中 (點擊按鈕修改)';
+                exportBtn.classList.remove('hidden');
+            } else {
+                document.body.classList.remove('edit-mode-active');
+                label.innerText = '✏️ 開啟按鈕編輯';
+                exportBtn.classList.add('hidden');
+            }
+        }
+
+        // 為所有帶有 editable-btn 的按鈕綁定點擊事件
+        document.querySelectorAll('.editable-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (isEditMode) {
+                    e.preventDefault(); // 阻止原本的跳轉
+                    currentTargetBtn = this;
+                    
+                    // 抓取現有的文字與 URL
+                    const btnTextSpan = this.querySelector('.btn-text') || this;
+                    const currentText = btnTextSpan.innerText.trim();
+                    const currentUrl = this.getAttribute('href') || '#';
+
+                    // 填入 Modal
+                    document.getElementById('modalBtnText').value = currentText;
+                    document.getElementById('modalBtnUrl').value = currentUrl;
+
+                    // 顯示 Modal
+                    document.getElementById('editModal').classList.remove('hidden');
+                }
+            });
+        });
+
+        // 關閉 Modal
+        function closeModal() {
+            document.getElementById('editModal').classList.add('hidden');
+            currentTargetBtn = null;
+        }
+
+        // 儲存修改
+        function saveBtnChanges() {
+            if (!currentTargetBtn) return;
+
+            const newText = document.getElementById('modalBtnText').value.trim();
+            const newUrl = document.getElementById('modalBtnUrl').value.trim();
+
+            if (newText) {
+                const btnTextSpan = currentTargetBtn.querySelector('.btn-text');
+                if (btnTextSpan) {
+                    btnTextSpan.innerText = newText;
+                } else {
+                    currentTargetBtn.innerText = newText;
+                }
+            }
+
+            if (newUrl) {
+                currentTargetBtn.setAttribute('href', newUrl);
+            }
+
+            closeModal();
+        }
+
+        // 匯出修改後的 HTML 檔案
+        function exportHTML() {
+            // 匯出前關閉編輯模式以保持乾淨的 HTML
+            document.getElementById('editToggle').checked = false;
+            toggleEditMode();
+
+            // 取得整個 HTML
+            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pinkbird-tour-updated.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
 
 </body>
 </html>
