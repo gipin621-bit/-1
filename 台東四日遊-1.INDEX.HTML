@@ -44,7 +44,8 @@
             border: 3px solid white;
             box-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
-        /* 編輯模式時按鈕的外框特效 */
+        
+        /* 編輯模式 - 按鈕外框 (紅邊) */
         .edit-mode-active .editable-btn {
             outline: 3px dashed #ef4444 !important;
             outline-offset: 2px;
@@ -54,31 +55,55 @@
         .edit-mode-active .editable-btn::after {
             content: '✏️';
             position: absolute;
-            top: -10px;
-            right: -10px;
+            top: -8px;
+            right: -8px;
             background: #ef4444;
             color: white;
             font-size: 10px;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 30;
+        }
+
+        /* 編輯模式 - 景點區塊外框 (藍邊) */
+        .edit-mode-active .editable-spot {
+            outline: 3px dashed #3b82f6 !important;
+            outline-offset: 4px;
+            cursor: pointer !important;
+            position: relative;
+            border-radius: 12px;
+        }
+        .edit-mode-active .editable-spot::after {
+            content: '📍 編輯景點';
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background: #3b82f6;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 30;
         }
     </style>
 </head>
 <body class="bg-pb-light text-pb-dark pb-24">
 
-
     <!-- ==========================================
          TOP EDIT CONTROL (編輯模式控制列)
          ========================================== -->
-    <div class="fixed top-3 right-3 z-50 bg-black/80 text-white backdrop-blur-md px-4 py-2 rounded-full shadow-2xl flex items-center gap-3 border border-white/20">
+    <div class="fixed top-3 right-3 z-50 bg-black/85 text-white backdrop-blur-md px-4 py-2 rounded-full shadow-2xl flex items-center gap-3 border border-white/20">
         <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="editToggle" class="sr-only peer" onchange="toggleEditMode()">
             <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
-            <span class="ml-2 text-sm font-bold select-none" id="editToggleLabel">✏️ 開啟按鈕編輯</span>
+            <span class="ml-2 text-sm font-bold select-none" id="editToggleLabel">✏️ 開啟內容編輯</span>
         </label>
         <button id="exportBtn" onclick="exportHTML()" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow transition">
             💾 儲存並下載 HTML
@@ -111,7 +136,7 @@
 
         <div class="mb-10">
             <p class="text-lg font-bold">115/12/31 ～ 116/1/3</p>
-            <!-- 可編輯按鈕 1 -->
+            <!-- Hero 區域報名按鈕 (可編輯) -->
             <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn inline-block bg-shengyu-yellow text-shengyu-green font-black text-xl px-12 py-4 rounded-full shadow-lg hover:bg-white transition duration-300">
                 <i class="fas fa-ticket-alt mr-2"></i><span class="btn-text">立即報名</span>
             </a>
@@ -159,37 +184,42 @@
             <p class="text-gray-500 mb-6">台中出發 → 台東跨年</p>
             
             <div class="border-l-2 border-gray-200 ml-3 space-y-8 relative">
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 1-1 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-bus-alt mr-1"></i>交通</span>
-                    <h4 class="text-lg font-bold">勝裕豪華遊覽車出發</h4>
-                    <p class="text-sm text-gray-600">準時在指定地點集合，搭乘舒適遊覽車展開旅程。</p>
+                    <h4 class="spot-title text-lg font-bold">勝裕豪華遊覽車出發</h4>
+                    <p class="spot-desc text-sm text-gray-600">準時在指定地點集合，搭乘舒適遊覽車展開旅程。</p>
                 </div>
 
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 1-2 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-skating mr-1"></i>活動</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
-                    <h4 class="text-lg font-bold">漫步台東海濱公園</h4>
-                    <p class="text-sm text-gray-600">欣賞無敵海景，提前感受跨年氣氛。</p>
-                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：傍晚時分拍攝「國際地標」(向陽樹) 與太平洋的合影最迷人。</p>
+                    <h4 class="spot-title text-lg font-bold">漫步台東海濱公園</h4>
+                    <p class="spot-desc text-sm text-gray-600">欣賞無敵海景，提前感受跨年氣氛。</p>
+                    <p class="spot-tip mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：傍晚時分拍攝「國際地標」(向陽樹) 與太平洋的合影最迷人。</p>
                 </div>
 
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 1-3 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-fireworks mr-1"></i>活動</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
-                    <h4 class="text-lg font-bold">跨年晚會與璀璨高空煙火</h4>
-                    <p class="text-sm text-gray-600">在歡呼聲中迎接嶄新的一年，享受一輩子難忘的回憶。</p>
+                    <h4 class="spot-title text-lg font-bold">跨年晚會與璀璨高空煙火</h4>
+                    <p class="spot-desc text-sm text-gray-600">在歡呼聲中迎接嶄新的一年，享受一輩子難忘的回憶。</p>
                 </div>
 
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 1-4 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-hotel mr-1"></i>酒店</span>
-                    <h4 class="text-lg font-bold">入住：台東凱旋會館</h4>
-                    <p class="text-sm text-gray-600">舒適休息，為明日迎曙光準備。</p>
+                    <h4 class="spot-title text-lg font-bold">入住：台東凱旋會館</h4>
+                    <p class="spot-desc text-sm text-gray-600">舒適休息，為明日迎曙光準備。</p>
                 </div>
             </div>
 
-            <footer class="mt-8 bg-pb-light p-4 rounded-xl text-center border-t border-gray-200">
-                <p class="text-sm">👗 建議穿著：多層次穿搭 (洋蔥式)，晚上戶外跨年較冷。</p>
-                <p class="text-sm">☀️ 天氣提示：台東冬季早晚溫差大，請準備保暖外套。</p>
+            <!-- Day 1 貼心提醒 (可編輯) -->
+            <footer class="editable-spot mt-8 bg-pb-light p-4 rounded-xl text-center border-t border-gray-200">
+                <p class="spot-desc text-sm">👗 建議穿著：多層次穿搭 (洋蔥式)，晚上戶外跨年較冷。</p>
+                <p class="spot-tip text-sm mt-1">☀️ 天氣提示：台東冬季早晚溫差大，請準備保暖外套。</p>
             </footer>
         </article>
 
@@ -200,34 +230,37 @@
             <p class="text-gray-500 mb-6">迎曙光 → 花東縱谷單車</p>
             
             <div class="border-l-2 border-gray-200 ml-3 space-y-8 relative">
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 2-1 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-cloud-sun-rain mr-1"></i>活動</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
-                    <h4 class="text-lg font-bold">迎 2027 第一道曙光</h4>
-                    <p class="text-sm text-gray-600">感受太陽從太平洋海平面緩緩升起的感動。</p>
-                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：使用縮時攝影記錄太陽升起過程；或以剪影方式與大海合影。</p>
+                    <h4 class="spot-title text-lg font-bold">迎 2027 第一道曙光</h4>
+                    <p class="spot-desc text-sm text-gray-600">感受太陽從太平洋海平面緩緩升起的感動。</p>
+                    <p class="spot-tip mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：使用縮時攝影記錄太陽升起過程；或以剪影方式與大海合影。</p>
                 </div>
 
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 2-2 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-bicycle mr-1"></i>活動</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
                     <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必吃</span>
-                    <h4 class="text-lg font-bold">池上單車漫遊：伯朗大道、天堂路</h4>
-                    <p class="text-sm text-gray-600">騎乘單車穿梭於無盡的稻田間，與金城武樹合影。</p>
-                    <p class="mt-2 text-sm text-red-800 bg-red-50 p-3 rounded-lg">#必吃：池上飯包 (便當)、大池豆皮店</p>
-                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：在天堂路的S型彎道處，可以拍出無限延伸的感覺。</p>
+                    <h4 class="spot-title text-lg font-bold">池上單車漫遊：伯朗大道、天堂路</h4>
+                    <p class="spot-desc text-sm text-gray-600">騎乘單車穿梭於無盡的稻田間，與金城武樹合影。 #必吃：池上飯包 (便當)、大池豆皮店</p>
+                    <p class="spot-tip mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：在天堂路的S型彎道處，可以拍出無限延伸的感覺。</p>
                 </div>
 
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 2-3 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-hotel mr-1"></i>酒店</span>
-                    <h4 class="text-lg font-bold">入住：台糖池上牧野渡假村</h4>
-                    <p class="text-sm text-gray-600">體驗大草原風情，享受寧靜夜晚。</p>
+                    <h4 class="spot-title text-lg font-bold">入住：台糖池上牧野渡假村</h4>
+                    <p class="spot-desc text-sm text-gray-600">體驗大草原風情，享受寧靜夜晚。</p>
                 </div>
             </div>
 
-            <footer class="mt-8 bg-pb-light p-4 rounded-xl text-center border-t border-gray-200">
-                <p class="text-sm">👗 建議穿著：清晨氣溫極低，需有羽絨衣；單車行程穿著休閒運動服。</p>
-                <p class="text-sm">☀️ 天氣提示：清晨體感溫度可能接近 10 度，白天太陽出來後會轉為舒適。</p>
+            <!-- Day 2 貼心提醒 (可編輯) -->
+            <footer class="editable-spot mt-8 bg-pb-light p-4 rounded-xl text-center border-t border-gray-200">
+                <p class="spot-desc text-sm">👗 建議穿著：清晨氣溫極低，需有羽絨衣；單車行程穿著休閒運動服。</p>
+                <p class="spot-tip text-sm mt-1">☀️ 天氣提示：清晨體感溫度可能接近 10 度，白天太陽出來後會轉為舒適。</p>
             </footer>
         </article>
 
@@ -238,40 +271,38 @@
             <p class="text-gray-500 mb-6">南橫天路縱走 → 寶來溫泉</p>
             
             <div class="border-l-2 border-gray-200 ml-3 space-y-8 relative">
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 3-1 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-shuttle-van mr-1"></i>交通</span>
-                    <h4 class="text-lg font-bold">換乘南橫專用接駁車</h4>
-                    <p class="text-sm text-gray-600">由於山路狹窄，換乘中型巴士深入南橫核心。</p>
-                    <!-- 可編輯連結按鈕 -->
+                    <h4 class="spot-title text-lg font-bold">換乘南橫專用接駁車</h4>
+                    <p class="spot-desc text-sm text-gray-600">由於山路狹窄，換乘中型巴士深入南橫核心。</p>
                     <p class="mt-2 text-sm text-red-600 font-bold bg-red-50 p-3 rounded-lg border border-red-200">⚠️ 南橫路況提醒：南橫公路常有動態管制，請依導遊通知為準，或
-                        <a href="https://168.thb.gov.tw/" target="_blank" class="editable-btn underline text-red-800 font-black"><span class="btn-text">查詢公路總局動態情報</span></a>。
+                        <a href="https://168.thb.gov.tw/" target="_blank" class="editable-btn inline-block underline text-red-800 font-black px-1"><span class="btn-text">查詢公路總局動態情報</span></a>。
                     </p>
                 </div>
 
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 3-2 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-tree mr-1"></i>景點</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
-                    <h4 class="text-lg font-bold">縱走南橫經典秘境</h4>
-                    <ul class="text-sm text-gray-600 list-disc list-inside mt-1 space-y-1">
-                        <li>六口溫泉、霧鹿峽谷 (壯麗石壁)</li>
-                        <li>向陽森林、埡口雲海 (夢幻場景)</li>
-                        <li>大關山隧道、檜谷神木</li>
-                        <li>天池、長青祠</li>
-                    </ul>
-                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：埡口是最高點，運氣好能拍到整片滿滿的雲海 strike。</p>
+                    <h4 class="spot-title text-lg font-bold">縱走南橫經典秘境</h4>
+                    <p class="spot-desc text-sm text-gray-600">六口溫泉、霧鹿峽谷 (壯麗石壁) / 向陽森林、埡口雲海 (夢幻場景) / 大關山隧道、檜谷神木 / 天池、長青祠</p>
+                    <p class="spot-tip mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：埡口是最高點，運氣好能拍到整片滿滿的雲海。</p>
                 </div>
 
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 3-3 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-hotel mr-1"></i>酒店</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
-                    <h4 class="text-lg font-bold">入住：寶來溫泉山莊 (泡溫泉)</h4>
-                    <p class="text-sm text-gray-600">泡進天然碳酸氫鈉美人湯，洗去旅途疲憊。</p>
+                    <h4 class="spot-title text-lg font-bold">入住：寶來溫泉山莊 (泡溫泉)</h4>
+                    <p class="spot-desc text-sm text-gray-600">泡進天然碳酸氫鈉美人湯，洗去旅途疲憊。</p>
                 </div>
             </div>
 
-            <footer class="mt-8 bg-pb-light p-4 rounded-xl text-center border-t border-gray-200">
-                <p class="text-sm">👗 建議穿著：海拔較高 (超過2000m)，需有防風防水外套及毛帽。記得帶泳衣泡湯。</p>
-                <p class="text-sm">☀️ 天氣提示：山上氣溫偏低，埡口處容易起霧或出現不到 10 度的低溫。</p>
+            <!-- Day 3 貼心提醒 (可編輯) -->
+            <footer class="editable-spot mt-8 bg-pb-light p-4 rounded-xl text-center border-t border-gray-200">
+                <p class="spot-desc text-sm">👗 建議穿著：海拔較高 (超過2000m)，需有防風防水外套及毛帽。記得帶泳衣泡湯。</p>
+                <p class="spot-tip text-sm mt-1">☀️ 天氣提示：山上氣溫偏低，埡口處容易起霧或出現不到 10 度的低溫。</p>
             </footer>
         </article>
 
@@ -282,31 +313,34 @@
             <p class="text-gray-500 mb-6">寶來 → 錫安山 → 回程</p>
             
             <div class="border-l-2 border-gray-200 ml-3 space-y-8 relative">
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 4-1 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-place-of-worship mr-1"></i>景點</span>
                     <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold mb-1">#必拍</span>
-                    <h4 class="text-lg font-bold">神祕色彩的錫安山</h4>
-                    <p class="text-sm text-gray-600">走訪大衛城堡、凱旋門及歷史園區。</p>
-                    <p class="mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：宏偉的「凱旋門」與純白的「大衛城堡」是必拍建築。</p>
-                    <p class="mt-2 text-sm text-gray-500 bg-gray-100 p-3 rounded-lg">🚗 停車＆加油資訊：錫安山園區內設有大型免費停車場。山下六龜或甲仙區有加油站。</p>
+                    <h4 class="spot-title text-lg font-bold">神祕色彩的錫安山</h4>
+                    <p class="spot-desc text-sm text-gray-600">走訪大衛城堡、凱旋門及歷史園區。</p>
+                    <p class="spot-tip mt-2 text-sm text-shengyu-green bg-pb-light p-3 rounded-lg">💡 拍照小技巧：宏偉的「凱旋門」與純白的「大衛城堡」是必拍建築。</p>
+                    <p class="text-sm text-gray-500 bg-gray-100 p-3 rounded-lg mt-2">🚗 停車＆加油資訊：錫安山園區內設有大型免費停車場。山下六龜或甲仙區有加油站。</p>
                 </div>
 
-                <div class="pl-8 relative itinerary-dot">
+                <!-- 景點 4-2 (可編輯) -->
+                <div class="editable-spot pl-8 relative itinerary-dot p-2">
                     <span class="inline-block bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-xs font-bold mb-1"><i class="fas fa-bus-alt mr-1"></i>交通</span>
-                    <h4 class="text-lg font-bold">勝裕豪華遊覽車回程台中</h4>
-                    <p class="text-sm text-gray-600">帶著滿滿回憶與難忘時刻，平安返抵台中。</p>
+                    <h4 class="spot-title text-lg font-bold">勝裕豪華遊覽車回程台中</h4>
+                    <p class="spot-desc text-sm text-gray-600">帶著滿滿回憶與難忘時刻，平安返抵台中。</p>
                 </div>
             </div>
 
-            <footer class="mt-8 bg-pb-light p-4 rounded-xl text-center border-t border-gray-200">
-                <p class="text-sm">👗 建議穿著：穿著舒適、便於步行的鞋子。</p>
-                <p class="text-sm">☀️ 天氣提示：多雲時陰，中午體感溫度舒適。</p>
+            <!-- Day 4 貼心提醒 (可編輯) -->
+            <footer class="editable-spot mt-8 bg-pb-light p-4 rounded-xl text-center border-t border-gray-200">
+                <p class="spot-desc text-sm">👗 建議穿著：穿著舒適、便於步行的鞋子。</p>
+                <p class="spot-tip text-sm mt-1">☀️ 天氣提示：多雲時陰，中午體感溫度舒適。</p>
             </footer>
         </article>
     </main>
 
     <!-- ==========================================
-         PRICE & BOOKING SECTION (售價區)
+         PRICE & BOOKING SECTION (銷售區)
          ========================================== -->
     <section class="bg-shengyu-green p-6 md:p-10 shadow-inner text-white text-center">
         <h2 class="text-3xl font-black mb-6">一年一次的跨年圓夢旅程</h2>
@@ -318,7 +352,7 @@
             <p class="text-xl font-bold">115/12/31 ～ 116/1/3</p>
         </div>
         <div>
-            <!-- 可編輯按鈕 2 -->
+            <!-- 銷售區「我要報名！」按鈕 (可編輯) -->
             <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn inline-block bg-shengyu-yellow text-shengyu-green font-black text-2xl px-16 py-5 rounded-full shadow-lg hover:bg-white transition duration-300 transform hover:scale-105">
                 <i class="fas fa-shopping-cart mr-2"></i><span class="btn-text">我要報名！</span>
             </a>
@@ -326,7 +360,7 @@
     </section>
 
     <!-- ==========================================
-         FOOTER (資訊與報名入口)
+         FOOTER (頁腳)
          ========================================== -->
     <footer class="bg-pb-dark text-white p-8 space-y-6 text-center">
         <p class="text-2xl font-black">📞 粉鳥旅行社</p>
@@ -334,54 +368,54 @@
             <p><i class="fas fa-phone-alt mr-2 text-shengyu-yellow"></i>04-23357766</p>
             <p><i class="fab fa-line mr-2 text-shengyu-yellow"></i>ID：@fwv3243l (末字小寫 L)</p>
         </div>
-        <p class="text-sm text-gray-400">粉鳥旅遊平台，提供最優質的旅遊服務，讓您的旅行更加精彩！</p>
-        <div class="text-xs text-gray-500 pt-6 border-t border-gray-700">
+        
+        <!-- 頁腳「線上報名入口」按鈕 (可編輯) -->
+        <div>
+            <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn inline-block bg-gray-600 text-white font-bold text-sm px-6 py-2 rounded-full hover:bg-gray-500">
+                <span class="btn-text">線上報名入口</span>
+            </a>
+        </div>
+
+        <p class="text-sm text-gray-300 pt-2">粉鳥旅遊平台，提供最優質的旅遊服務，讓您的旅行更加精彩！</p>
+        <div class="text-xs text-gray-400 pt-4 border-t border-gray-700">
             註冊編號846600 <br>
             交觀甲6190 品保中0491
         </div>
-        <!-- 可編輯按鈕 3 -->
-        <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn inline-block bg-gray-600 text-white font-bold text-sm px-6 py-2 rounded-full hover:bg-gray-500">
-            <span class="btn-text">線上報名入口</span>
-        </a>
     </footer>
 
     <!-- ==========================================
-         FLOATING ACTION BUTTON (手機版右下角浮動按鈕)
+         FLOATING ACTION BUTTON (右下角浮動報名按鈕)
          ========================================== -->
-    <!-- 可編輯按鈕 4 (浮動按鈕) -->
     <a href="https://pinkbird-travels.com/tours/PBT26120401" target="_blank" class="editable-btn fixed bottom-24 right-6 bg-shengyu-yellow text-shengyu-green w-20 h-20 rounded-full shadow-2xl flex flex-col items-center justify-center border-4 border-white transform hover:scale-110 active:scale-95 transition z-50 md:bottom-10 md:right-10">
         <span class="btn-text font-black text-xl leading-tight text-center">立即<br>報名</span>
     </a>
 
     <!-- ==========================================
-         BOTTOM NAV BAR (底部浮動導覽條)
+         BOTTOM NAV BAR (導覽列三個按鈕)
          ========================================== -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-xl p-3 flex justify-around items-center z-40">
-        <!-- 可編輯導覽按鈕 1 -->
-        <a href="#" class="editable-btn text-center text-shengyu-green font-bold">
+        <a href="#" class="editable-btn text-center text-shengyu-green font-bold px-3 py-1 rounded-lg">
             <i class="fas fa-home text-2xl"></i>
             <span class="btn-text block text-xs mt-1">首頁</span>
         </a>
-        <!-- 可編輯導覽按鈕 2 -->
-        <a href="tel:04-23357766" class="editable-btn text-center text-gray-600">
+        <a href="tel:04-23357766" class="editable-btn text-center text-gray-600 font-bold px-3 py-1 rounded-lg">
             <i class="fas fa-phone-alt text-2xl"></i>
             <span class="btn-text block text-xs mt-1">電話熱線</span>
         </a>
-        <!-- 可編輯導覽按鈕 3 -->
-        <a href="https://line.me/ti/p/%40fwv3243l" target="_blank" class="editable-btn text-center text-gray-600">
+        <a href="https://line.me/ti/p/%40fwv3243l" target="_blank" class="editable-btn text-center text-gray-600 font-bold px-3 py-1 rounded-lg">
             <i class="fab fa-line text-2xl"></i>
             <span class="btn-text block text-xs mt-1">LINE 諮詢</span>
         </a>
     </nav>
 
     <!-- ==========================================
-         MODAL FOR EDITING BUTTONS (編輯彈窗)
+         MODAL 1: 按鈕編輯彈窗
          ========================================== -->
-    <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="editBtnModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-xl font-bold text-gray-800">✏️ 編輯按鈕設定</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+                <h3 class="text-xl font-bold text-gray-800">✏️ 編輯按鈕與連結</h3>
+                <button onclick="closeModal('editBtnModal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
             </div>
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-1">按鈕顯示文字</label>
@@ -392,8 +426,36 @@
                 <input type="text" id="modalBtnUrl" class="w-full border-2 border-gray-300 rounded-xl p-3 focus:border-shengyu-green focus:outline-none text-sm font-mono">
             </div>
             <div class="flex justify-end gap-3 pt-3">
-                <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 font-bold hover:bg-gray-300">取消</button>
+                <button onclick="closeModal('editBtnModal')" class="px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 font-bold hover:bg-gray-300">取消</button>
                 <button onclick="saveBtnChanges()" class="px-5 py-2.5 rounded-xl bg-shengyu-green text-white font-bold hover:bg-emerald-800 shadow">儲存修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 2: 景點資訊編輯彈窗
+         ========================================== -->
+    <div id="editSpotModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-bold text-blue-800">📍 編輯景點與行程資訊</h3>
+                <button onclick="closeModal('editSpotModal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <div id="spotTitleGroup">
+                <label class="block text-sm font-bold text-gray-700 mb-1">景點／活動名稱</label>
+                <input type="text" id="modalSpotTitle" class="w-full border-2 border-gray-300 rounded-xl p-3 focus:border-blue-500 focus:outline-none font-bold">
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">行程內文說明</label>
+                <textarea id="modalSpotDesc" rows="3" class="w-full border-2 border-gray-300 rounded-xl p-3 focus:border-blue-500 focus:outline-none text-sm"></textarea>
+            </div>
+            <div id="spotTipGroup">
+                <label class="block text-sm font-bold text-gray-700 mb-1">💡 導遊秘笈／小技巧／提醒</label>
+                <textarea id="modalSpotTip" rows="2" class="w-full border-2 border-gray-300 rounded-xl p-3 focus:border-blue-500 focus:outline-none text-sm"></textarea>
+            </div>
+            <div class="flex justify-end gap-3 pt-3">
+                <button onclick="closeModal('editSpotModal')" class="px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 font-bold hover:bg-gray-300">取消</button>
+                <button onclick="saveSpotChanges()" class="px-5 py-2.5 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 shadow">儲存修改</button>
             </div>
         </div>
     </div>
@@ -404,6 +466,7 @@
     <script>
         let isEditMode = false;
         let currentTargetBtn = null;
+        let currentTargetSpot = null;
 
         // 切換編輯模式
         function toggleEditMode() {
@@ -413,75 +476,109 @@
 
             if (isEditMode) {
                 document.body.classList.add('edit-mode-active');
-                label.innerText = '🔴 編輯模式中 (點擊按鈕修改)';
+                label.innerText = '🔴 編輯模式中 (點擊紅/藍框編輯)';
                 exportBtn.classList.remove('hidden');
             } else {
                 document.body.classList.remove('edit-mode-active');
-                label.innerText = '✏️ 開啟按鈕編輯';
+                label.innerText = '✏️ 開啟內容編輯';
                 exportBtn.classList.add('hidden');
             }
         }
 
-        // 為所有帶有 editable-btn 的按鈕綁定點擊事件
+        // 綁定「按鈕」點擊編輯
         document.querySelectorAll('.editable-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 if (isEditMode) {
-                    e.preventDefault(); // 阻止原本的跳轉
+                    e.preventDefault();
+                    e.stopPropagation();
                     currentTargetBtn = this;
                     
-                    // 抓取現有的文字與 URL
                     const btnTextSpan = this.querySelector('.btn-text') || this;
                     const currentText = btnTextSpan.innerText.trim();
                     const currentUrl = this.getAttribute('href') || '#';
 
-                    // 填入 Modal
                     document.getElementById('modalBtnText').value = currentText;
                     document.getElementById('modalBtnUrl').value = currentUrl;
+                    document.getElementById('editBtnModal').classList.remove('hidden');
+                }
+            });
+        });
 
-                    // 顯示 Modal
-                    document.getElementById('editModal').classList.remove('hidden');
+        // 綁定「景點/行程區塊」點擊編輯
+        document.querySelectorAll('.editable-spot').forEach(spot => {
+            spot.addEventListener('click', function(e) {
+                if (isEditMode) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    currentTargetSpot = this;
+
+                    const titleEl = this.querySelector('.spot-title');
+                    const descEl = this.querySelector('.spot-desc');
+                    const tipEl = this.querySelector('.spot-tip');
+
+                    // 填入既有內容
+                    document.getElementById('spotTitleGroup').style.display = titleEl ? 'block' : 'none';
+                    if (titleEl) document.getElementById('modalSpotTitle').value = titleEl.innerText.trim();
+                    if (descEl) document.getElementById('modalSpotDesc').value = descEl.innerText.trim();
+                    
+                    document.getElementById('spotTipGroup').style.display = tipEl ? 'block' : 'none';
+                    if (tipEl) document.getElementById('modalSpotTip').value = tipEl.innerText.trim();
+
+                    document.getElementById('editSpotModal').classList.remove('hidden');
                 }
             });
         });
 
         // 關閉 Modal
-        function closeModal() {
-            document.getElementById('editModal').classList.add('hidden');
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
             currentTargetBtn = null;
+            currentTargetSpot = null;
         }
 
-        // 儲存修改
+        // 儲存按鈕修改
         function saveBtnChanges() {
             if (!currentTargetBtn) return;
-
             const newText = document.getElementById('modalBtnText').value.trim();
             const newUrl = document.getElementById('modalBtnUrl').value.trim();
 
             if (newText) {
                 const btnTextSpan = currentTargetBtn.querySelector('.btn-text');
                 if (btnTextSpan) {
-                    btnTextSpan.innerText = newText;
+                    btnTextSpan.innerHTML = newText.replace(/\n/g, '<br>');
                 } else {
-                    currentTargetBtn.innerText = newText;
+                    currentTargetBtn.innerHTML = newText.replace(/\n/g, '<br>');
                 }
             }
-
-            if (newUrl) {
-                currentTargetBtn.setAttribute('href', newUrl);
-            }
-
-            closeModal();
+            if (newUrl) currentTargetBtn.setAttribute('href', newUrl);
+            closeModal('editBtnModal');
         }
 
-        // 匯出修改後的 HTML 檔案
+        // 儲存景點修改
+        function saveSpotChanges() {
+            if (!currentTargetSpot) return;
+
+            const newTitle = document.getElementById('modalSpotTitle').value.trim();
+            const newDesc = document.getElementById('modalSpotDesc').value.trim();
+            const newTip = document.getElementById('modalSpotTip').value.trim();
+
+            const titleEl = currentTargetSpot.querySelector('.spot-title');
+            const descEl = currentTargetSpot.querySelector('.spot-desc');
+            const tipEl = currentTargetSpot.querySelector('.spot-tip');
+
+            if (titleEl && newTitle) titleEl.innerText = newTitle;
+            if (descEl && newDesc) descEl.innerText = newDesc;
+            if (tipEl && newTip) tipEl.innerText = newTip;
+
+            closeModal('editSpotModal');
+        }
+
+        // 匯出 HTML 檔案
         function exportHTML() {
-            // 匯出前關閉編輯模式以保持乾淨的 HTML
             document.getElementById('editToggle').checked = false;
             toggleEditMode();
 
-            // 取得整個 HTML
             const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
